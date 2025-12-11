@@ -1,13 +1,14 @@
-// src/components/player/NowPlayingPanel.tsx
-import React, { useMemo } from "react";
-import type { PlayerMetadata, PlayerState } from "../../types";
+import { useMemo } from "react";
+import type { ChangeEvent } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPause,
   faPlay,
   faForwardStep,
   faBackwardStep,
+  faStop,
 } from "@fortawesome/free-solid-svg-icons";
+import type { PlayerMetadata, PlayerState } from "../../types";
 import { VolumeControl } from "./VolumeControl";
 
 interface NowPlayingPanelProps {
@@ -16,6 +17,7 @@ interface NowPlayingPanelProps {
   onPlayPause: () => void;
   onNext: () => void;
   onPrevious: () => void;
+  onStop: () => void;
   onSeek: (seconds: number) => void;
   onChangeVolume: (volume: number) => void;
 }
@@ -27,21 +29,25 @@ const formatTime = (seconds: number): string => {
   return `${m}:${s.toString().padStart(2, "0")}`;
 };
 
-export const NowPlayingPanel: React.FC<NowPlayingPanelProps> = ({
+export const NowPlayingPanel = ({
   metadata,
   state,
   onPlayPause,
   onNext,
   onPrevious,
+  onStop,
   onSeek,
   onChangeVolume,
-}) => {
+}: NowPlayingPanelProps) => {
   const progress = useMemo(() => {
     if (!state.duration || state.duration <= 0) return 0;
-    return Math.min(100, Math.max(0, (state.currentTime / state.duration) * 100));
+    return Math.min(
+      100,
+      Math.max(0, (state.currentTime / state.duration) * 100),
+    );
   }, [state.currentTime, state.duration]);
 
-  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSeek = (e: ChangeEvent<HTMLInputElement>) => {
     const pct = Number(e.target.value);
     const seconds = (pct / 100) * (state.duration || 0);
     onSeek(seconds);
@@ -89,7 +95,6 @@ export const NowPlayingPanel: React.FC<NowPlayingPanelProps> = ({
           </div>
         )}
 
-        {/* Overlay gradient */}
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/40 via-transparent to-transparent" />
       </div>
 
@@ -143,7 +148,7 @@ export const NowPlayingPanel: React.FC<NowPlayingPanelProps> = ({
         </div>
 
         {/* Controls */}
-        <div className="mt-2 flex items-center gap-4">
+        <div className="mt-2 flex items-center gap-3 md:gap-4">
           <button
             type="button"
             onClick={onPrevious}
@@ -193,10 +198,26 @@ export const NowPlayingPanel: React.FC<NowPlayingPanelProps> = ({
           >
             <FontAwesomeIcon icon={faForwardStep} />
           </button>
+
+          <button
+            type="button"
+            onClick={onStop}
+            className="
+              h-9 w-9 rounded-full
+              bg-red-600/80 hover:bg-red-500
+              flex items-center justify-center
+              text-white
+              transition
+              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black
+            "
+            aria-label="Stop playback"
+          >
+            <FontAwesomeIcon icon={faStop} />
+          </button>
         </div>
       </div>
 
-      {/* Right: volume control (hidden on very small widths if needed) */}
+      {/* Right: volume control */}
       <div className="hidden sm:flex items-center justify-center pl-2">
         <VolumeControl volume={state.volume} onChangeVolume={onChangeVolume} />
       </div>

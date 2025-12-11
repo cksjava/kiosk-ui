@@ -1,5 +1,4 @@
-// src/App.tsx
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import type {
   Album,
   Track,
@@ -11,7 +10,7 @@ import { AppLayout } from "./components/layout/AppLayout";
 import { AlbumTrackList } from "./components/library/AlbumTrackList";
 import { AlbumList } from "./components/library/AlbumList";
 
-const App: React.FC = () => {
+const App = () => {
   const [albums, setAlbums] = useState<Album[]>([]);
   const [selectedAlbum, setSelectedAlbum] = useState<Album | null>(null);
   const [tracks, setTracks] = useState<Track[]>([]);
@@ -20,7 +19,7 @@ const App: React.FC = () => {
   const [activeSection, setActiveSection] = useState<LibrarySection>("albums");
 
   const [playerMetadata, setPlayerMetadata] = useState<PlayerMetadata | null>(
-    null
+    null,
   );
 
   const [playerState, setPlayerState] = useState<PlayerState>({
@@ -179,7 +178,7 @@ const App: React.FC = () => {
         currentTime: 0,
       }));
       setCurrentTrackId(null);
-      // If you want to clear metadata completely on stop, uncomment:
+      // If you want to clear metadata completely on stop:
       // setPlayerMetadata(null);
     } catch (err) {
       console.error("Error stopping playback:", err);
@@ -260,6 +259,7 @@ const App: React.FC = () => {
       onPlayPause={handlePlayPause}
       onNext={handleNext}
       onPrevious={handlePrevious}
+      onStop={stopPlayback}
       onSeek={handleSeek}
       onChangeVolume={handleChangeVolume}
     >

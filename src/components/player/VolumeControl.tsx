@@ -1,18 +1,18 @@
-// src/components/player/VolumeControl.tsx
-import React from "react";
+import type { ChangeEvent } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faVolumeOff, faVolumeLow, faVolumeHigh } from "@fortawesome/free-solid-svg-icons";
+import {
+  faVolumeOff,
+  faVolumeLow,
+  faVolumeHigh,
+} from "@fortawesome/free-solid-svg-icons";
 
 interface VolumeControlProps {
-  volume: number; // 0-100
+  volume: number; // 0–100
   onChangeVolume: (value: number) => void;
 }
 
-export const VolumeControl: React.FC<VolumeControlProps> = ({
-  volume,
-  onChangeVolume,
-}) => {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+export const VolumeControl = ({ volume, onChangeVolume }: VolumeControlProps) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value);
     onChangeVolume(Math.min(100, Math.max(0, value)));
   };

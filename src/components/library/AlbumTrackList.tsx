@@ -1,8 +1,7 @@
-// src/components/library/AlbumTrackList.tsx
-import React from "react";
-import type { Album, Track } from "../../types";
+import type { KeyboardEvent } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faWaveSquare } from "@fortawesome/free-solid-svg-icons";
+import type { Album, Track } from "../../types";
 
 interface AlbumTrackListProps {
   album: Album | null;
@@ -18,16 +17,13 @@ const formatDuration = (seconds?: number): string => {
   return `${m}:${s.toString().padStart(2, "0")}`;
 };
 
-export const AlbumTrackList: React.FC<AlbumTrackListProps> = ({
+export const AlbumTrackList = ({
   album,
   tracks,
   currentTrackId,
   onSelectTrack,
-}) => {
-  const handleKeyDown = (
-    e: React.KeyboardEvent<HTMLDivElement>,
-    track: Track
-  ) => {
+}: AlbumTrackListProps) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>, track: Track) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       onSelectTrack(track);
@@ -74,7 +70,10 @@ export const AlbumTrackList: React.FC<AlbumTrackListProps> = ({
           ) : (
             <div className="h-full w-full flex flex-col items-center justify-center text-[11px] text-zinc-200">
               <div className="h-8 w-8 rounded-full border border-lime-400/70 flex items-center justify-center mb-1">
-                <FontAwesomeIcon icon={faWaveSquare} className="text-lime-300 text-xs" />
+                <FontAwesomeIcon
+                  icon={faWaveSquare}
+                  className="text-lime-300 text-xs"
+                />
               </div>
               <span className="uppercase tracking-[0.18em] text-[10px] text-lime-300/80">
                 Album
@@ -135,7 +134,6 @@ export const AlbumTrackList: React.FC<AlbumTrackListProps> = ({
                     cursor-pointer
                     transition
                     outline-none
-                    bg-white/3
                     bg-gradient-to-r from-white/5 via-zinc-900/40 to-black/50
                     border ${isActive ? "border-lime-400/70" : "border-white/5"}
                     hover:border-lime-300/60

@@ -1,9 +1,8 @@
-// src/types.ts
 export interface Album {
   album: string;
   artist: string;
   trackCount: number;
-  coverUrl?: string; // optional, can be wired later
+  coverUrl?: string;
 }
 
 export interface Track {
@@ -27,6 +26,6 @@ export interface PlayerMetadata {
 export interface PlayerState {
   isPlaying: boolean;
   currentTime: number; // seconds
-  duration: number;    // seconds
-  volume: number;      // 0–100
+  duration: number; // seconds
+  volume: number; // 0–100
 }

@@ -1,14 +1,12 @@
-// src/components/layout/Sidebar.tsx
-import React from "react";
-import type { LibrarySection } from "../../types";
+import type { KeyboardEvent } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCompactDisc,
   faHouse,
-  faMusic,
   faListUl,
 } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
+import type { LibrarySection } from "../../types";
 
 interface SidebarProps {
   activeSection: LibrarySection;
@@ -18,18 +16,12 @@ interface SidebarProps {
 const navItems: { id: LibrarySection; label: string; icon: any }[] = [
   { id: "home", label: "Home", icon: faHouse },
   { id: "albums", label: "Albums", icon: faCompactDisc },
-  { id: "artists", label: "Artists", icon: faUser },   // fixed here
-  { id: "tracks", label: "Tracks", icon: faMusic },
+  { id: "artists", label: "Artists", icon: faUser },
+  { id: "tracks", label: "Tracks", icon: faListUl },
 ];
 
-export const Sidebar: React.FC<SidebarProps> = ({
-  activeSection,
-  onChangeSection,
-}) => {
-  const handleKeyDown = (
-    e: React.KeyboardEvent<HTMLButtonElement>,
-    section: LibrarySection
-  ) => {
+export const Sidebar = ({ activeSection, onChangeSection }: SidebarProps) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLButtonElement>, section: LibrarySection) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       onChangeSection(section);
@@ -61,7 +53,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
         <div className="flex flex-col">
           <span className="text-sm uppercase tracking-[0.15em] text-lime-300/80">
-            Sangeet
+            Graixl
           </span>
           <span className="font-semibold text-base leading-tight">
             Sonic Kiosk

@@ -1,8 +1,7 @@
-// src/components/library/AlbumList.tsx
-import React from "react";
-import type { Album } from "../../types";
+import type { KeyboardEvent } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCompactDisc } from "@fortawesome/free-solid-svg-icons";
+import type { Album } from "../../types";
 
 interface AlbumListProps {
   albums: Album[];
@@ -10,15 +9,12 @@ interface AlbumListProps {
   onSelectAlbum: (album: Album) => void;
 }
 
-export const AlbumList: React.FC<AlbumListProps> = ({
+export const AlbumList = ({
   albums,
   selectedAlbum,
   onSelectAlbum,
-}) => {
-  const handleKeyDown = (
-    e: React.KeyboardEvent<HTMLDivElement>,
-    album: Album
-  ) => {
+}: AlbumListProps) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>, album: Album) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       onSelectAlbum(album);
@@ -58,13 +54,12 @@ export const AlbumList: React.FC<AlbumListProps> = ({
                 cursor-pointer
                 transition
                 outline-none
-                bg-gradient-to-r from-white/3 via-zinc-900/40 to-black/50
+                bg-gradient-to-r from-white/5 via-zinc-900/40 to-black/50
                 border ${isActive ? "border-lime-400/80" : "border-white/5"}
                 hover:border-lime-300/60 hover:bg-white/10
                 focus-visible:ring-2 focus-visible:ring-lime-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black
               `}
             >
-              {/* Icon / pseudo-cover */}
               <div
                 className={`
                   h-10 w-10 rounded-xl
@@ -80,7 +75,6 @@ export const AlbumList: React.FC<AlbumListProps> = ({
                 />
               </div>
 
-              {/* Text */}
               <div className="flex-1 min-w-0">
                 <p
                   className={`
