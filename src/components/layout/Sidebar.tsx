@@ -67,7 +67,7 @@ export const Sidebar = ({
         </div>
         <div className="flex flex-col">
           <span className="text-sm uppercase tracking-[0.15em] text-lime-300/80">
-            AIS
+            AudioBerry
           </span>
           <span className="font-semibold text-base leading-tight">
             Sonic Kiosk

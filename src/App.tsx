@@ -8,6 +8,7 @@ import type {
 } from "./types";
 import { AppLayout } from "./components/layout/AppLayout";
 import { AlbumTrackList } from "./components/library/AlbumTrackList";
+import './App.css';
 
 const PLAYER_STORAGE_KEY = "sonic-kiosk-player-v1";
 
