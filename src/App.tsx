@@ -323,7 +323,7 @@ const App = () => {
   const renderAlbumsSection = () => {
     // Only tracks in main panel; albums moved into sidebar
     return (
-      <div className="h-full">
+      <div className="h-full w-full min-w-0 overflow-x-hidden">
         <AlbumTrackList
           album={selectedAlbum}
           tracks={tracks}

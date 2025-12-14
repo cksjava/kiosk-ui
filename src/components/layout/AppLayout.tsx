@@ -56,7 +56,7 @@ export const AppLayout = ({
           onSelectAlbum={onSelectAlbum}
         />
 
-        <main className="flex-1 h-full flex flex-col bg-gradient-to-br from-zinc-950/80 via-zinc-900/80 to-emerald-950/80 backdrop-blur-2xl">
+        <main className="flex-1 h-full flex flex-col bg-gradient-to-br from-zinc-950/80 via-zinc-900/80 to-emerald-950/80 backdrop-blur-2xl overflow-x-hidden">
           <div className="border-b border-white/5">
             <NowPlayingPanel
               metadata={playerMetadata}

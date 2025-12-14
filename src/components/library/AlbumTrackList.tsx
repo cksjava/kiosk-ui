@@ -50,7 +50,7 @@ export const AlbumTrackList = ({
       : Number(trackCountRaw ?? 0);
 
   return (
-    <section className="flex flex-col gap-4">
+    <section className="flex flex-col gap-4 w-full min-w-0">
       {/* Album header */}
       <header
         className="
@@ -60,6 +60,7 @@ export const AlbumTrackList = ({
           p-4 md:p-5
           border border-white/5
           shadow-lg shadow-black/40
+          w-full min-w-0 overflow-hidden
         "
       >
         <div
@@ -97,14 +98,26 @@ export const AlbumTrackList = ({
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
         </div>
 
-        <div className="flex-1 min-w-0">
+        <div className="flex-1 min-w-0 w-full">
           <p className="uppercase text-[11px] tracking-[0.2em] text-lime-300/80 mb-1">
             Now Browsing
           </p>
-          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white mb-1 truncate">
+          <h1
+            className="
+              text-2xl md:text-3xl font-extrabold tracking-tight text-white mb-1
+              max-w-full overflow-hidden text-ellipsis whitespace-nowrap
+            "
+            title={album.album}
+          >
             {album.album}
           </h1>
-          <p className="text-sm md:text-base text-zinc-300 mb-1 truncate">
+          <p
+            className="
+              text-sm md:text-base text-zinc-300 mb-1
+              max-w-full overflow-hidden text-ellipsis whitespace-nowrap
+            "
+            title={album.artist}
+          >
             {album.artist}
           </p>
           <p className="text-xs md:text-sm text-zinc-500">
@@ -114,7 +127,7 @@ export const AlbumTrackList = ({
       </header>
 
       {/* Track list */}
-      <div className="mt-1 mb-4">
+      <div className="mt-1 mb-4 w-full min-w-0 overflow-hidden">
         <h2 className="text-sm uppercase tracking-[0.18em] text-zinc-400 mb-3">
           Tracks
         </h2>
@@ -125,7 +138,7 @@ export const AlbumTrackList = ({
           </div>
         )}
 
-        <ul className="space-y-2">
+        <ul className="space-y-2 w-full min-w-0">
           {tracks.map((track, index) => {
             const isActive = track.id === currentTrackId;
 
@@ -138,7 +151,7 @@ export const AlbumTrackList = ({
               undefined;
 
             return (
-              <li key={track.id}>
+              <li key={track.id} className="w-full min-w-0">
                 <div
                   tabIndex={0}
                   role="button"
@@ -159,10 +172,11 @@ export const AlbumTrackList = ({
                     hover:border-lime-300/60
                     hover:bg-white/10
                     focus-visible:ring-2 focus-visible:ring-lime-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black
+                    w-full min-w-0
                   `}
                 >
                   {/* Track number / playing indicator */}
-                  <div className="w-6 text-xs md:text-sm text-zinc-500 flex justify-center">
+                  <div className="w-6 text-xs md:text-sm text-zinc-500 flex justify-center flex-shrink-0">
                     {isActive ? (
                       <span className="text-lime-300">
                         <FontAwesomeIcon icon={faPlay} className="text-[10px]" />
@@ -202,25 +216,39 @@ export const AlbumTrackList = ({
                   </div>
 
                   {/* Text info */}
-                  <div className="flex-1 min-w-0">
+                  <div className="flex-1 min-w-0 flex flex-col gap-0.5">
                     <p
                       className={`
-                        text-sm md:text-base font-semibold truncate
+                        text-sm md:text-base font-semibold
+                        max-w-full overflow-hidden text-ellipsis whitespace-nowrap
                         ${isActive ? "text-lime-200" : "text-white"}
                       `}
+                      title={track.title}
                     >
                       {track.title}
                     </p>
-                    <p className="text-xs md:text-sm text-zinc-300 truncate">
+                    <p
+                      className="
+                        text-xs md:text-sm text-zinc-300
+                        max-w-full overflow-hidden text-ellipsis whitespace-nowrap
+                      "
+                      title={track.artist}
+                    >
                       {track.artist}
                     </p>
-                    <p className="text-[11px] text-zinc-500 truncate">
+                    <p
+                      className="
+                        text-[11px] text-zinc-500
+                        max-w-full overflow-hidden text-ellipsis whitespace-nowrap
+                      "
+                      title={track.album}
+                    >
                       {track.album}
                     </p>
                   </div>
 
                   {/* Duration */}
-                  <div className="ml-2 text-xs md:text-sm text-zinc-300">
+                  <div className="ml-2 text-xs md:text-sm text-zinc-300 flex-shrink-0">
                     {formatDuration(durationSeconds)}
                   </div>
                 </div>
