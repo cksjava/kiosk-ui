@@ -6,11 +6,16 @@ import {
   faListUl,
 } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
-import type { LibrarySection } from "../../types";
+import type { Album, LibrarySection } from "../../types";
+import { AlbumList } from "../library/AlbumList";
 
 interface SidebarProps {
   activeSection: LibrarySection;
   onChangeSection: (section: LibrarySection) => void;
+
+  albums: Album[];
+  selectedAlbum: Album | null;
+  onSelectAlbum: (album: Album) => void;
 }
 
 const navItems: { id: LibrarySection; label: string; icon: any }[] = [
@@ -20,8 +25,17 @@ const navItems: { id: LibrarySection; label: string; icon: any }[] = [
   { id: "tracks", label: "Tracks", icon: faListUl },
 ];
 
-export const Sidebar = ({ activeSection, onChangeSection }: SidebarProps) => {
-  const handleKeyDown = (e: KeyboardEvent<HTMLButtonElement>, section: LibrarySection) => {
+export const Sidebar = ({
+  activeSection,
+  onChangeSection,
+  albums,
+  selectedAlbum,
+  onSelectAlbum,
+}: SidebarProps) => {
+  const handleKeyDown = (
+    e: KeyboardEvent<HTMLButtonElement>,
+    section: LibrarySection,
+  ) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       onChangeSection(section);
@@ -61,8 +75,8 @@ export const Sidebar = ({ activeSection, onChangeSection }: SidebarProps) => {
         </div>
       </div>
 
-      {/* Navigation */}
-      <nav className="mt-2 px-2 flex-1 overflow-y-auto">
+      {/* Navigation (fixed height, not scrollable) */}
+      <nav className="mt-2 px-2">
         <ul className="space-y-1">
           {navItems.map((item) => {
             const isActive = item.id === activeSection;
@@ -109,6 +123,18 @@ export const Sidebar = ({ activeSection, onChangeSection }: SidebarProps) => {
         </ul>
       </nav>
 
+      {/* Albums list area: takes remaining height and is scrollable */}
+      <div className="mt-4 flex-1 overflow-hidden px-2">
+        {activeSection === "albums" && (
+          <AlbumList
+            albums={albums}
+            selectedAlbum={selectedAlbum}
+            onSelectAlbum={onSelectAlbum}
+          />
+        )}
+      </div>
+
+      {/* Footer helper text */}
       <div className="px-4 pb-4 pt-2 text-[11px] text-zinc-500">
         <p>
           Use <span className="text-zinc-300">Tab</span> and{" "}

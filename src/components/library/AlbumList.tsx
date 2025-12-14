@@ -38,10 +38,19 @@ export const AlbumList = ({
         )}
 
         {albums.map((album) => {
-          const isActive = selectedAlbum?.album === album.album;
+          const isActive = selectedAlbum?.id === album.id;
+          const trackCountRaw = album.trackCount as unknown;
+          const trackCount =
+            typeof trackCountRaw === "number"
+              ? trackCountRaw
+              : Number(trackCountRaw ?? 0);
+
+          const coverUrl =
+            album.id != null ? `/album-cover/${album.id}` : undefined;
+
           return (
             <div
-              key={album.album}
+              key={album.id ?? `${album.album}-${album.artist}`}
               tabIndex={0}
               role="button"
               onClick={() => onSelectAlbum(album)}
@@ -62,17 +71,33 @@ export const AlbumList = ({
             >
               <div
                 className={`
+                  relative
                   h-10 w-10 rounded-xl
                   flex items-center justify-center
                   bg-gradient-to-br from-zinc-700 via-zinc-900 to-black
                   shadow-sm
+                  overflow-hidden
                   ${isActive ? "shadow-lime-500/40" : "shadow-black/40"}
                 `}
               >
+                {/* Fallback icon */}
                 <FontAwesomeIcon
                   icon={faCompactDisc}
                   className={isActive ? "text-lime-300" : "text-zinc-300"}
                 />
+
+                {/* Album cover on top, hidden if load fails */}
+                {coverUrl && (
+                  <img
+                    src={coverUrl}
+                    alt={album.album}
+                    className="absolute inset-0 h-full w-full object-cover rounded-xl"
+                    onError={(e) => {
+                      // Hide broken image so the icon shows
+                      e.currentTarget.style.display = "none";
+                    }}
+                  />
+                )}
               </div>
 
               <div className="flex-1 min-w-0">
@@ -88,7 +113,7 @@ export const AlbumList = ({
                   {album.artist}
                 </p>
                 <p className="text-[11px] text-zinc-500">
-                  {album.trackCount} track{album.trackCount !== 1 ? "s" : ""}
+                  {trackCount} track{trackCount !== 1 ? "s" : ""}
                 </p>
               </div>
             </div>

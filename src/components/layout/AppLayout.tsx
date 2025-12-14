@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { Sidebar } from "./Sidebar";
 import { NowPlayingPanel } from "../player/NowPlayingPanel";
 import type {
+  Album,
   LibrarySection,
   PlayerMetadata,
   PlayerState,
@@ -21,6 +22,10 @@ interface AppLayoutProps {
   onSeek: (seconds: number) => void;
   onChangeVolume: (volume: number) => void;
 
+  albums: Album[];
+  selectedAlbum: Album | null;
+  onSelectAlbum: (album: Album) => void;
+
   children?: ReactNode;
 }
 
@@ -35,6 +40,9 @@ export const AppLayout = ({
   onStop,
   onSeek,
   onChangeVolume,
+  albums,
+  selectedAlbum,
+  onSelectAlbum,
   children,
 }: AppLayoutProps) => {
   return (
@@ -43,6 +51,9 @@ export const AppLayout = ({
         <Sidebar
           activeSection={activeSection}
           onChangeSection={onChangeSection}
+          albums={albums}
+          selectedAlbum={selectedAlbum}
+          onSelectAlbum={onSelectAlbum}
         />
 
         <main className="flex-1 h-full flex flex-col bg-gradient-to-br from-zinc-950/80 via-zinc-900/80 to-emerald-950/80 backdrop-blur-2xl">
@@ -59,9 +70,7 @@ export const AppLayout = ({
             />
           </div>
 
-          <div className="flex-1 overflow-y-auto px-6 py-4">
-            {children}
-          </div>
+          <div className="flex-1 overflow-y-auto px-6 py-4">{children}</div>
         </main>
       </div>
     </div>

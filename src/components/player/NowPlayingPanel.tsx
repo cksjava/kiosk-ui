@@ -54,34 +54,34 @@ export const NowPlayingPanel = ({
   };
 
   const isSomethingPlaying = !!metadata;
+  const coverUrl = metadata?.coverUrl || undefined;
 
   return (
     <section
       className="
-        px-6 py-4
         flex gap-4
-        items-center
+        items-stretch
         bg-gradient-to-br from-white/5 via-emerald-900/30 to-black/60
         backdrop-blur-xl
+        h-40 md:h-48 lg:h-56   /* panel height -> art height */
+        px-6
       "
       aria-label="Now playing"
     >
-      {/* Cover art */}
+      {/* Cover art: fills full panel height, square */}
       <div
         className="
-          relative
-          h-20 w-20 md:h-28 md:w-28
-          rounded-2xl
-          overflow-hidden
-          bg-gradient-to-br from-zinc-700 via-zinc-900 to-black
           flex-shrink-0
-          shadow-lg shadow-black/60
+          relative
+          h-full
+          aspect-square
+          overflow-hidden
         "
       >
-        {metadata?.coverUrl ? (
+        {coverUrl ? (
           <img
-            src={metadata.coverUrl}
-            alt={`${metadata.title} cover`}
+            src={coverUrl}
+            alt={metadata ? `${metadata.title} cover` : "Track cover"}
             className="h-full w-full object-cover"
           />
         ) : (
@@ -94,15 +94,14 @@ export const NowPlayingPanel = ({
             </span>
           </div>
         )}
-
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/40 via-transparent to-transparent" />
       </div>
 
       {/* Middle: text + progress + controls */}
-      <div className="flex-1 flex flex-col gap-2 min-w-0">
+      <div className="flex-1 flex flex-col gap-3 min-w-0 py-3">
         {/* Title & artist */}
         <div className="min-w-0">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 mb-1">
             <h1 className="text-lg md:text-xl font-semibold truncate">
               {metadata?.title || "Nothing playing"}
             </h1>
@@ -124,13 +123,11 @@ export const NowPlayingPanel = ({
           )}
         </div>
 
-        {/* Progress */}
-        <div className="mt-1">
-          <div className="flex items-center gap-2 text-[11px] text-zinc-400 mb-1">
-            <span>{formatTime(state.currentTime)}</span>
-            <span className="flex-1 h-px bg-zinc-700/70" aria-hidden="true" />
-            <span>{formatTime(state.duration)}</span>
-          </div>
+        {/* Progress bar with time labels inline */}
+        <div className="flex items-center gap-3">
+          <span className="text-[11px] text-zinc-400 w-10 text-right">
+            {formatTime(state.currentTime)}
+          </span>
           <input
             type="range"
             min={0}
@@ -139,12 +136,19 @@ export const NowPlayingPanel = ({
             onChange={handleSeek}
             disabled={!isSomethingPlaying || !state.duration}
             className={`
-              w-full
+              flex-1
               accent-lime-400
-              ${!isSomethingPlaying || !state.duration ? "opacity-40 cursor-default" : ""}
+              ${
+                !isSomethingPlaying || !state.duration
+                  ? "opacity-40 cursor-default"
+                  : ""
+              }
             `}
             aria-label="Seek in current track"
           />
+          <span className="text-[11px] text-zinc-400 w-10">
+            {formatTime(state.duration)}
+          </span>
         </div>
 
         {/* Controls */}
@@ -218,7 +222,7 @@ export const NowPlayingPanel = ({
       </div>
 
       {/* Right: volume control */}
-      <div className="hidden sm:flex items-center justify-center pl-2">
+      <div className="hidden sm:flex items-center justify-center pl-4 pr-2">
         <VolumeControl volume={state.volume} onChangeVolume={onChangeVolume} />
       </div>
     </section>

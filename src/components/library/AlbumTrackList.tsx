@@ -38,6 +38,17 @@ export const AlbumTrackList = ({
     );
   }
 
+  const albumCoverUrl =
+    typeof album.id === "number" && album.id > 0
+      ? `/album-cover/${album.id}`
+      : undefined;
+
+  const trackCountRaw = album.trackCount as unknown;
+  const trackCount =
+    typeof trackCountRaw === "number"
+      ? trackCountRaw
+      : Number(trackCountRaw ?? 0);
+
   return (
     <section className="flex flex-col gap-4">
       {/* Album header */}
@@ -61,9 +72,9 @@ export const AlbumTrackList = ({
             flex-shrink-0
           "
         >
-          {album.coverUrl ? (
+          {albumCoverUrl ? (
             <img
-              src={album.coverUrl}
+              src={albumCoverUrl}
               alt={`${album.album} cover`}
               className="h-full w-full object-cover"
             />
@@ -97,13 +108,13 @@ export const AlbumTrackList = ({
             {album.artist}
           </p>
           <p className="text-xs md:text-sm text-zinc-500">
-            {album.trackCount} track{album.trackCount !== 1 ? "s" : ""}
+            {trackCount} track{trackCount !== 1 ? "s" : ""}
           </p>
         </div>
       </header>
 
       {/* Track list */}
-      <div className="mt-1">
+      <div className="mt-1 mb-4">
         <h2 className="text-sm uppercase tracking-[0.18em] text-zinc-400 mb-3">
           Tracks
         </h2>
@@ -117,6 +128,15 @@ export const AlbumTrackList = ({
         <ul className="space-y-2">
           {tracks.map((track, index) => {
             const isActive = track.id === currentTrackId;
+
+            const trackCoverUrl =
+              track.id != null ? `/track-cover/${track.id}` : undefined;
+
+            const durationSeconds =
+              (track as any).durationSeconds ??
+              (track as any).duration ??
+              undefined;
+
             return (
               <li key={track.id}>
                 <div
@@ -163,9 +183,9 @@ export const AlbumTrackList = ({
                       flex-shrink-0
                     "
                   >
-                    {(track.coverUrl || album.coverUrl) ? (
+                    {trackCoverUrl || albumCoverUrl ? (
                       <img
-                        src={track.coverUrl || album.coverUrl}
+                        src={trackCoverUrl || albumCoverUrl}
                         alt={`${track.title} cover`}
                         className="h-full w-full object-cover"
                       />
@@ -201,7 +221,7 @@ export const AlbumTrackList = ({
 
                   {/* Duration */}
                   <div className="ml-2 text-xs md:text-sm text-zinc-300">
-                    {formatDuration(track.durationSeconds)}
+                    {formatDuration(durationSeconds)}
                   </div>
                 </div>
               </li>

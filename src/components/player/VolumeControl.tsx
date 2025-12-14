@@ -1,42 +1,41 @@
 import type { ChangeEvent } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faVolumeOff,
-  faVolumeLow,
-  faVolumeHigh,
-} from "@fortawesome/free-solid-svg-icons";
 
 interface VolumeControlProps {
   volume: number; // 0–100
   onChangeVolume: (value: number) => void;
 }
 
-export const VolumeControl = ({ volume, onChangeVolume }: VolumeControlProps) => {
+const getVolumeLabel = (v: number): string => {
+  if (v === 0) return "Mute";
+  if (v <= 30) return "Low";
+  if (v <= 70) return "Medium";
+  return "High";
+};
+
+export const VolumeControl = ({
+  volume,
+  onChangeVolume,
+}: VolumeControlProps) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = Number(e.target.value);
-    onChangeVolume(Math.min(100, Math.max(0, value)));
+    const v = Number(e.target.value);
+    if (Number.isNaN(v)) return;
+    onChangeVolume(Math.max(0, Math.min(100, v)));
   };
 
-  const icon =
-    volume === 0 ? faVolumeOff : volume < 50 ? faVolumeLow : faVolumeHigh;
+  const levelLabel = getVolumeLabel(volume);
 
   return (
-    <div
-      className="
-        flex flex-col items-center justify-center
-        gap-2
-        md:px-4
-        text-xs md:text-[11px]
-      "
-      aria-label="Volume control"
-    >
-      <span className="text-zinc-400 hidden md:inline-block mb-1">
+    <div className="flex flex-col items-center justify-center gap-2">
+      <span className="text-[11px] uppercase tracking-[0.18em] text-zinc-400">
         Volume
       </span>
-      <FontAwesomeIcon icon={icon} className="text-zinc-200 mb-1" />
 
-      {/* Vertical on md+ screens */}
-      <div className="hidden md:flex flex-col items-center h-28">
+      <span className="text-[11px] text-zinc-300">
+        {volume}% · <span className="text-lime-300">{levelLabel}</span>
+      </span>
+
+      <div className="h-32 flex items-center justify-center">
+        {/* Horizontal range rotated to become vertical */}
         <input
           type="range"
           min={0}
@@ -44,24 +43,13 @@ export const VolumeControl = ({ volume, onChangeVolume }: VolumeControlProps) =>
           value={volume}
           onChange={handleChange}
           className="
+            w-32
             accent-lime-400
-            h-24
-            [writing-mode:bt-lr]
+            -rotate-90
             origin-center
-            rotate-180
+            cursor-pointer
           "
-        />
-      </div>
-
-      {/* Horizontal on mobile */}
-      <div className="md:hidden w-24">
-        <input
-          type="range"
-          min={0}
-          max={100}
-          value={volume}
-          onChange={handleChange}
-          className="accent-lime-400 w-full"
+          aria-label="Volume"
         />
       </div>
     </div>
